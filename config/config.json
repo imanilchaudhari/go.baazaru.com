@@ -1,0 +1,68 @@
+{
+	"Database": {
+		"Type": "MySQL",
+		"MySQL": {
+			"Username": "root",
+			"Password": "password",
+			"Name": "baazaru.com",
+			"Hostname": "127.0.0.1",
+			"Port": 3306,
+			"Parameter": "?parseTime=true"
+		},
+		"SQLite": {
+			"Parameter": "baazaru.com.db"
+		}
+	},
+	"Email": {
+		"Username": "",
+		"Password": "",
+		"Hostname": "email-smtp.us-east-1.amazonaws.com",
+		"Port": 587,
+		"From": "admin@baazaru.com"
+	},
+	"Pushover": {
+		"Enabled": false,
+		"Token": "",
+		"UserKey": ""
+	},
+	"Recaptcha": {
+		"Enabled": false,
+		"Secret": "",
+		"SiteKey": ""
+	},
+	"Server": {
+		"Hostname": "",
+		"UseHTTP": true,
+		"UseHTTPS": false,
+		"HTTPPort": 8080,
+		"HTTPSPort": 443,
+		"CertFile": "tls/server.crt",
+		"KeyFile": "tls/server.key"
+	},
+	"Session": {
+		"SecretKey": "$E=e+U?Rug*8AGAneZaD@6ce3UqUFU*u",
+		"Name": "gosess",
+		"Options": {
+			"Path": "/",
+			"Domain": "",
+			"MaxAge": 28800,
+			"Secure": false,
+			"HttpOnly": true
+		}
+	},
+	"Template": {
+		"Root": "index",
+		"Children": [
+			"part_menu",
+			"part_footer",
+			"part_about"
+		]
+	},
+	"View": {
+		"BaseURI": "http://localhost:8080/",
+		"Extension": "html",
+		"Folder": "views",
+		"Name": "blank",
+		"Caching": true
+	}
+}
