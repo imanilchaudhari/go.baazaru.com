@@ -53,9 +53,9 @@
 	"Template": {
 		"Root": "index",
 		"Children": [
-			"part_menu",
-			"part_footer",
-			"part_about"
+			"_header",
+			"_menu",
+			"_footer"
 		]
 	},
 	"View": {
