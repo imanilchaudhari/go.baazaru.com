@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="assets/ico/favicon.png">
+    <title>{{template "title" .}}</title>
+    <!-- Bootstrap core CSS -->
+    {{CSS "web/assets/bootstrap/css/bootstrap.css"}}
+
+    {{CSS "web/assets/css/style.css"}}
+
+    <!-- styles needed for carousel slider -->
+    {{CSS "web/assets/plugins/owl-carousel/owl.carousel.css"}}
+    {{CSS "web/assets/plugins/owl-carousel/owl.theme.css"}}
+
+    <!-- bxSlider CSS file -->
+    {{CSS "web/assets/plugins/bxslider/jquery.bxslider.css"}}
+
+    <!-- Just for debugging purposes. -->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- include pace script for automatic web page progress bar  -->
+    <script>
+        paceOptions = {
+            elements: true
+        };
+    </script>
+    {{JS "web/assets/js/pace.min.js"}}
+
+    {{template "head" .}}
+</head>
+<body>
+<div id="wrapper">
+
+    {{template "_header" .}}
+
+    <input id="BaseURI" type="hidden" value="{{.BaseURI}}">
+    <div id="flash-container">
+    {{range $fm := .flashes}}
+        <div data-alert id="flash-message" class="alert-box-fixed0 alert-box-fixed {{.Class}}">{{.Message}}<a href="#" class="close">&times;</a></div>
+    {{end}}
+    </div>
+    
+    {{template "content" .}}
+
+    {{template "_footer" .}}
+
+</div>
+<!-- /.wrapper -->
+
+
+<!-- Le javascript
+================================================== -->
+
+<!-- Placed at the end of the document so the pages load faster -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+{{JS "web/assets/bootstrap/js/bootstrap.min.js"}}
+{{JS "web/assets/js/vendors.min.js"}}
+
+<!-- include custom script for site  -->
+{{JS "web/assets/js/script.js"}}
+
+<!-- include jquery autocomplete plugin  -->
+
+{{JS "web/assets/plugins/autocomplete/jquery.mockjax.js"}}
+{{JS "web/assets/plugins/autocomplete/jquery.autocomplete.js"}}
+{{JS "web/assets/plugins/autocomplete/usastates.js"}}
+
+{{JS "web/assets/plugins/autocomplete/autocomplete-demo.js"}}
+
+{{template "foot" .}}
+
+</body>
+
+</html>

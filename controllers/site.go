@@ -40,7 +40,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	} else {
 		// Display the view
 		v := view.New(r)
-		v.Name = "home"
+		v.Name = "index"
 		v.Render(w)
 	}
 }
