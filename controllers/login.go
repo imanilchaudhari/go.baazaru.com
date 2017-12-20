@@ -6,11 +6,11 @@ import (
 	"log"
 	"net/http"
 
-	"baazaru.com/models"
 	"baazaru.com/components/passhash"
 	"baazaru.com/components/recaptcha"
 	"baazaru.com/components/session"
 	"baazaru.com/components/view"
+	"baazaru.com/models"
 
 	"github.com/gorilla/sessions"
 )
@@ -34,12 +34,38 @@ func clearSessionVariables(sess *sessions.Session) {
 }
 
 func LoginGET(w http.ResponseWriter, r *http.Request) {
-	// Display the view
-	v := view.New(r)
-	v.Name = "login"
-	// Refill any form fields
-	view.Repopulate([]string{"email"}, r.Form, v.Vars)
-	v.Render(w)
+	// Get session
+	sess := session.Instance(r)
+
+	// If the user is logged in
+	if sess.Values["id"] != nil {
+
+		// Get the current user role
+		currentUID, _ := CurrentUserId(r)
+		role, err := models.RoleByUserId(int64(currentUID))
+		if err != nil {
+			log.Println(err)
+			Error500(w, r)
+			return
+		}
+
+		if role.Level_id == models.Role_level_User {
+			http.Redirect(w, r, "/profile", http.StatusFound)
+			return
+		} else {
+			http.Redirect(w, r, "/admin", http.StatusFound)
+			return
+		}
+
+	} else {
+
+		// Display the view
+		v := view.New(r)
+		v.Name = "login"
+		// Refill any form fields
+		view.Repopulate([]string{"email"}, r.Form, v.Vars)
+		v.Render(w)
+	}
 }
 
 func LoginPOST(w http.ResponseWriter, r *http.Request) {
