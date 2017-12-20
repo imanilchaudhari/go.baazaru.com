@@ -4,9 +4,9 @@ import (
 	"log"
 	"net/http"
 
+	"baazaru.com/components/session"
 	"baazaru.com/controllers"
 	"baazaru.com/models"
-	"baazaru.com/components/session"
 )
 
 // DisallowAuth does not allow authenticated users to access the page
@@ -25,8 +25,8 @@ func DisallowAuth(h http.Handler) http.Handler {
 	})
 }
 
-// DisallowAnon does not allow anonymous users to access the page
-func DisallowAnon(h http.Handler) http.Handler {
+// DisallowGuest does not allow guest users to access the page
+func DisallowGuest(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Get session
 		sess := session.Instance(r)
@@ -41,7 +41,7 @@ func DisallowAnon(h http.Handler) http.Handler {
 	})
 }
 
-// DisallowAnon does not allow anonymous users to access the page
+// AllowOnlyAdministrator Only allow to administrator users to access the page
 func AllowOnlyAdministrator(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Get the current user role

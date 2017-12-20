@@ -7,20 +7,21 @@ import (
 	"strings"
 	"time"
 
-	"baazaru.com/models"
+	"baazaru.com/components/logger"
 	"baazaru.com/components/session"
+	"baazaru.com/models"
 )
 
-// Handler will log the HTTP requests
-func Handler(next http.Handler) http.Handler {
+// ConsoleTarget will log the HTTP requests
+func ConsoleTarget(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(time.Now().Format("2006-01-02 03:04:05 PM"), r.RemoteAddr, r.Method, r.URL)
 		next.ServeHTTP(w, r)
 	})
 }
 
-// Handler will log the HTTP requests
-func Database(next http.Handler) http.Handler {
+// DbTarget will log the HTTP requests
+func DbTarget(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		if !strings.Contains(r.URL.Path, "/api/v1/verify") {
@@ -39,6 +40,41 @@ func Database(next http.Handler) http.Handler {
 				log.Println(err)
 			}
 		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
+// FileTarget will log the HTTP requests
+func FileTarget(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		// Set directory path to save log files
+		logger.Path("./runtime/log")
+
+		// Set log level by constant
+		logger.Level(logger.DEBUG)
+
+		// Set log level by string
+		logger.LevelAsString("debug")
+
+		// Set function to prepare format log line
+		logger.Format(func(level int, line string, message string) string {
+			return fmt.Sprintf("Only message: %s", message)
+		})
+
+		// Set log file size limit
+		logger.SizeLimit(2 * logger.MB)
+
+		ip, err := models.GetRemoteIP(r)
+		if err != nil {
+			log.Println(err)
+		}
+
+		logger.Debug("REQUEST IP :- " + ip + " URI " + r.URL.RequestURI())
+
+		// Set log output to stdout
+		logger.Stdout(true)
 
 		next.ServeHTTP(w, r)
 	})

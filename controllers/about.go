@@ -12,7 +12,7 @@ import (
 	"baazaru.com/models"
 )
 
-// Displays the default home page
+// Displays the about page
 func AboutGET(w http.ResponseWriter, r *http.Request) {
 	// Display the view
 	v := view.New(r)
@@ -20,11 +20,27 @@ func AboutGET(w http.ResponseWriter, r *http.Request) {
 	v.Render(w)
 }
 
-// Displays the default home page
+// Displays the terms page
 func TermsGET(w http.ResponseWriter, r *http.Request) {
 	// Display the view
 	v := view.New(r)
 	v.Name = "terms"
+	v.Render(w)
+}
+
+// Displays the privacy page
+func PrivacyGET(w http.ResponseWriter, r *http.Request) {
+	// Display the view
+	v := view.New(r)
+	v.Name = "privacy"
+	v.Render(w)
+}
+
+// Displays the career page
+func CareerGET(w http.ResponseWriter, r *http.Request) {
+	// Display the view
+	v := view.New(r)
+	v.Name = "career"
 	v.Render(w)
 }
 

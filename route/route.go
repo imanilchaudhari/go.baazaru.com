@@ -7,6 +7,7 @@ import (
 	"baazaru.com/route/middleware/acl"
 	hr "baazaru.com/route/middleware/httprouterwrapper"
 	"baazaru.com/route/middleware/logrequest"
+	"baazaru.com/route/middleware/pprofhandler"
 	//"baazaru.com/route/middleware/pprofhandler"
 
 	"github.com/gorilla/context"
@@ -58,6 +59,12 @@ func routes() *httprouter.Router {
 	r.GET("/terms", hr.Handler(alice.
 		New().
 		ThenFunc(controllers.TermsGET)))
+	r.GET("/privacy", hr.Handler(alice.
+		New().
+		ThenFunc(controllers.PrivacyGET)))
+	r.GET("/career", hr.Handler(alice.
+		New().
+		ThenFunc(controllers.CareerGET)))
 	r.GET("/contact", hr.Handler(alice.
 		New().
 		ThenFunc(controllers.ContactGET)))
@@ -73,6 +80,9 @@ func routes() *httprouter.Router {
 	r.GET("/image/:userid/:picid", hr.Handler(alice.
 		New().
 		ThenFunc(controllers.WatermarkImagesGET)))
+	r.GET("/category", hr.Handler(alice.
+		New().
+		ThenFunc(controllers.CategoryListGet)))
 
 	// Login and logout
 	r.GET("/login", hr.Handler(alice.
@@ -82,7 +92,7 @@ func routes() *httprouter.Router {
 		New(acl.DisallowAuth).
 		ThenFunc(controllers.LoginPOST)))
 	r.GET("/logout", hr.Handler(alice.
-		New(acl.DisallowAnon).
+		New(acl.DisallowGuest).
 		ThenFunc(controllers.Logout)))
 
 	// Register
@@ -100,52 +110,52 @@ func routes() *httprouter.Router {
 
 	// User Pages
 	r.GET("/profile", hr.Handler(alice.
-		New(acl.DisallowAnon).
+		New(acl.DisallowGuest).
 		ThenFunc(controllers.UserProfileGET)))
 	r.GET("/profile/initial", hr.Handler(alice.
-		New(acl.DisallowAnon).
+		New(acl.DisallowGuest).
 		ThenFunc(controllers.InitialPhotoGET)))
 	r.POST("/profile/initial", hr.Handler(alice.
-		New(acl.DisallowAnon).
+		New(acl.DisallowGuest).
 		ThenFunc(controllers.PhotoPOST)))
 	r.GET("/profile/initial/delete/:picid", hr.Handler(alice.
-		New(acl.DisallowAnon).
+		New(acl.DisallowGuest).
 		ThenFunc(controllers.InitialPhotoDeleteGET)))
 	r.GET("/profile/photo/upload", hr.Handler(alice.
-		New(acl.DisallowAnon).
+		New(acl.DisallowGuest).
 		ThenFunc(controllers.PhotoUploadGET)))
 	r.POST("/profile/photo/upload", hr.Handler(alice.
-		New(acl.DisallowAnon).
+		New(acl.DisallowGuest).
 		ThenFunc(controllers.PhotoPOST)))
 	r.GET("/profile/photo/delete/:picid", hr.Handler(alice.
-		New(acl.DisallowAnon).
+		New(acl.DisallowGuest).
 		ThenFunc(controllers.PhotoDeleteGET)))
 	r.GET("/profile/site", hr.Handler(alice.
-		New(acl.DisallowAnon).
+		New(acl.DisallowGuest).
 		ThenFunc(controllers.UserSiteGET)))
 	r.POST("/profile/site", hr.Handler(alice.
-		New(acl.DisallowAnon).
+		New(acl.DisallowGuest).
 		ThenFunc(controllers.UserSitePOST)))
 	r.GET("/profile/photo/download/:picid", hr.Handler(alice.
-		New(acl.DisallowAnon).
+		New(acl.DisallowGuest).
 		ThenFunc(controllers.PhotoDownloadGET)))
 	r.POST("/profile/information", hr.Handler(alice.
-		New(acl.DisallowAnon).
+		New(acl.DisallowGuest).
 		ThenFunc(controllers.UserInformationPOST)))
 	r.GET("/profile/information", hr.Handler(alice.
-		New(acl.DisallowAnon).
+		New(acl.DisallowGuest).
 		ThenFunc(controllers.UserInformationGET)))
 	r.GET("/profile/email", hr.Handler(alice.
-		New(acl.DisallowAnon).
+		New(acl.DisallowGuest).
 		ThenFunc(controllers.UserEmailGET)))
 	r.POST("/profile/email", hr.Handler(alice.
-		New(acl.DisallowAnon).
+		New(acl.DisallowGuest).
 		ThenFunc(controllers.UserEmailPOST)))
 	r.GET("/profile/password", hr.Handler(alice.
-		New(acl.DisallowAnon).
+		New(acl.DisallowGuest).
 		ThenFunc(controllers.UserPasswordGET)))
 	r.POST("/profile/password", hr.Handler(alice.
-		New(acl.DisallowAnon).
+		New(acl.DisallowGuest).
 		ThenFunc(controllers.UserPasswordPOST)))
 
 	// Admin Pages
@@ -183,9 +193,9 @@ func routes() *httprouter.Router {
 		ThenFunc(controllers.CronNotifyEmailExpireGET)))
 
 	// Enable Pprof
-	/*r.GET("/debug/pprof/*pprof", hr.Handler(alice.
-	New(acl.DisallowAnon).
-	ThenFunc(pprofhandler.Handler)))*/
+	r.GET("/debug/pprof/*pprof", hr.Handler(alice.
+		New(acl.DisallowGuest).
+		ThenFunc(pprofhandler.Handler)))
 
 	return r
 }
@@ -196,7 +206,7 @@ func routes() *httprouter.Router {
 
 func middleware(h http.Handler) http.Handler {
 	// Log every request
-	h = logrequest.Database(h)
+	h = logrequest.FileTarget(h)
 
 	// Clear handler for Gorilla Context
 	h = context.ClearHandler(h)
