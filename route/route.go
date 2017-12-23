@@ -10,6 +10,8 @@ import (
 	"baazaru.com/route/middleware/pprofhandler"
 	//"baazaru.com/route/middleware/pprofhandler"
 
+	config "github.com/go-ozzo/ozzo-config"
+	log "github.com/go-ozzo/ozzo-log"
 	"github.com/gorilla/context"
 	"github.com/julienschmidt/httprouter"
 	"github.com/justinas/alice"
@@ -82,7 +84,16 @@ func routes() *httprouter.Router {
 		ThenFunc(controllers.WatermarkImagesGET)))
 	r.GET("/category", hr.Handler(alice.
 		New().
-		ThenFunc(controllers.CategoryListGet)))
+		ThenFunc(controllers.CategoryIndex)))
+	r.GET("/category/:slug", hr.Handler(alice.
+		New().
+		ThenFunc(controllers.CategoryView)))
+	r.GET("/item/:slug", hr.Handler(alice.
+		New().
+		ThenFunc(controllers.ItemView)))
+	r.GET("/sitemap.xml", hr.Handler(alice.
+		New().
+		ThenFunc(controllers.SitemapIndex)))
 
 	// Login and logout
 	r.GET("/login", hr.Handler(alice.
@@ -94,6 +105,13 @@ func routes() *httprouter.Router {
 	r.GET("/logout", hr.Handler(alice.
 		New(acl.DisallowGuest).
 		ThenFunc(controllers.Logout)))
+
+	r.GET("/blog", hr.Handler(alice.
+		New().
+		ThenFunc(controllers.BlogIndex)))
+	r.GET("/blog/:slug", hr.Handler(alice.
+		New().
+		ThenFunc(controllers.BlogView)))
 
 	// Register
 	r.GET("/register", hr.Handler(alice.
@@ -205,6 +223,19 @@ func routes() *httprouter.Router {
 // *****************************************************************************
 
 func middleware(h http.Handler) http.Handler {
+
+	c := config.New()
+	c.Load("./config/config.json")
+
+	// register the target types to allow configuring Logger.Targets.
+	c.Register("ConsoleTarget", log.NewConsoleTarget)
+	c.Register("FileTarget", log.NewFileTarget)
+
+	logger := log.NewLogger()
+	if err := c.Configure(logger, "Logger"); err != nil {
+		panic(err)
+	}
+
 	// Log every request
 	h = logrequest.FileTarget(h)
 
