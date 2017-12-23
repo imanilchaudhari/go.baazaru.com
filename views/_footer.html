@@ -36,10 +36,10 @@
 					<div class="footer-col">
 						<h4 class="footer-title">More From Us</h4>
 						<ul class="list-unstyled footer-nav">
-							<li><a href="faq.html">FAQ</a></li>
+							<li><a href="{{.BaseURI}}faq">FAQ</a></li>
 							<li><a href="{{.BaseURI}}blog">Blog</a></li>
 							<li><a href="#">Popular Searches</a></li>
-							<li><a href="#"> Site Map</a></li>
+							<li><a href="{{.BaseURI}}sitemap.xml"> Site Map</a></li>
 							<li><a href="#"> Customer Reviews</a></li>
 						</ul>
 					</div>
@@ -48,12 +48,12 @@
 					<div class="footer-col">
 						<h4 class="footer-title">Account</h4>
 						<ul class="list-unstyled footer-nav">
-							<li><a href="account-home.html"> Manage Account</a></li>
+							<li><a href="{{.BaseURI}}account"> Manage Account</a></li>
 							<li><a href="{{.BaseURI}}login">Login</a></li>
 							<li><a href="{{.BaseURI}}register">Register</a></li>
-							<li><a href="account-myads.html"> My ads</a></li>
+							<li><a href="{{.BaseURI}}account/my-ad"> My ads</a></li>
 							<li><a href="{{.BaseURI}}profile"> Profile</a></li>
-							<li><a href="#">Promote Your Ad</a></li>
+							<li><a href="{{.BaseURI}}promote">Promote Your Ad</a></li>
 						</ul>
 					</div>
 				</div>

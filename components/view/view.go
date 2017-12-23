@@ -94,7 +94,7 @@ func (v *View) PrependBaseURI(s string) string {
 func New(req *http.Request) *View {
 	v := &View{}
 	v.Vars = make(map[string]interface{})
-	v.Vars["AuthLevel"] = "anon"
+	v.Vars["AuthLevel"] = "guest"
 
 	v.BaseURI = viewInfo.BaseURI
 	v.Extension = viewInfo.Extension
